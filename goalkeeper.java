@@ -19,7 +19,7 @@ public class goalkeeper
         this.width = width;
         this.height = height;
 
-        goalkeeper_football = new ImageIcon("C:\\Users\\20242326\\Downloads\\goalkeeper_standing.png").getImage();
+        goalkeeper_football = new ImageIcon("/Users/janufkrishnan/Downloads/WhatsApp Image 2025-10-19 at 15.19.11-converted-from-jpeg-2.png").getImage();
     }
 
     public void goalkeeperImage(Graphics g) {
