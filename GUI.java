@@ -4,12 +4,18 @@ import javax.swing.*;
 
 public class GUI {
     public String selectedTarget = null;
-    protected JPanel leftPanel; // accessible to subclasses like setup
+    protected JPanel leftPanel;
+    public ball footBall;
+    public goalkeeper keeper;
+    public goalkeeperAnimation keeperAnimate;
 
     void panels() {
         JFrame frame = new JFrame("Swingshot");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout());
+
+        footBall = new ball(505, 700,50,50);
+        keeper = new goalkeeper(425, 355, 200, 300);
 
         
         leftPanel = new JPanel() {
@@ -18,38 +24,42 @@ public class GUI {
                 super.paintComponent(g);
                 
 
-                g.setColor(new Color(15, 166, 254));//sky
+                g.setColor(new Color(15, 166, 254));
                 g.fillRect(0, 0, 1200, 600);
 
-                g.setColor(new Color(15, 100, 29));//field
+                g.setColor(new Color(15, 100, 29));
                 g.fillRect(0, 600, 1200, 200);
 
-                g.setColor(Color.white); //setting up goal post
+                g.setColor(Color.white);
                 g.fillRect(215, 300, 10, 300);
 
-                g.setColor(Color.white); //setting up goal post
+                g.setColor(Color.white);
                 g.fillRect(815, 300, 10, 300);
 
-                g.setColor(Color.white); //setting up goal post (crossbar)
+                g.setColor(Color.white);
                 g.fillRect(215, 300, 600, 10);
 
-                g.setColor(Color.white); //setting up goal lines
+                g.setColor(Color.white);
                 g.fillRect(165, 600, 10, 75);
 
-                g.setColor(Color.white); //setting up goal lines
+                g.setColor(Color.white);
                 g.fillRect(865, 600, 10, 75);
 
-                g.setColor(Color.white); //setting up goal lines
+                g.setColor(Color.white);
                 g.fillRect(165, 600, 10, 75);
 
-                g.setColor(Color.white); //setting up goal lines
+                g.setColor(Color.white);
                 g.fillRect(165, 675, 710, 10);
 
-                g.setColor(Color.white); //setting up goal lines
+                g.setColor(Color.white);
                 g.fillRect(0, 600, 1200, 5);
 
-                g.setColor(Color.white); //setting up penalty spot
+                g.setColor(Color.white);
                 g.fillOval(515, 720, 30, 30);
+
+                footBall.ballImage(g);
+                keeper.goalkeeperImage(g);
+                keeperAnimate = new goalkeeperAnimation(keeper, leftPanel);
 
             }
         };
@@ -60,7 +70,6 @@ public class GUI {
         JPanel rightPanel = new JPanel(new GridLayout(2, 1, 0, 0));
         rightPanel.setPreferredSize(new Dimension(500, 800));
 
-        // top panel
         JPanel shotPanel = new JPanel(new GridBagLayout());
         shotPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
@@ -99,6 +108,14 @@ public class GUI {
             powerTimer.stop();
             int powerValue = powerBar.getValue();
             System.out.println("Power level: " + powerValue);
+            if (selectedTarget == null) {
+                JOptionPane.showMessageDialog(frame, "Please select a shot direction first!");
+            } else {
+                ballAnimation animation = new ballAnimation(footBall, leftPanel);
+                animation.shooting(powerValue, selectedTarget);
+
+                keeperAnimate.dive();
+            }
         });
 
         GridBagConstraints gbc = new GridBagConstraints();
@@ -116,7 +133,6 @@ public class GUI {
         gbc.insets = new Insets(0, 0, 20, 0);
         shotPanel.add(shotPowerButton, gbc);
 
-        // bottom panel
         JPanel accuracyPanel = new JPanel(new GridBagLayout());
         accuracyPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
@@ -146,7 +162,6 @@ public class GUI {
         g.insets = new Insets(20, 20, 20, 20);
         g.fill = GridBagConstraints.NONE;
 
-        // top row
         g.gridx = 0; g.gridy = 0; g.anchor = GridBagConstraints.NORTHWEST;
         accuracyPanel.add(topLeft, g);
         g.gridx = 1; g.anchor = GridBagConstraints.NORTH;
@@ -154,7 +169,6 @@ public class GUI {
         g.gridx = 2; g.anchor = GridBagConstraints.NORTHEAST;
         accuracyPanel.add(topRight, g);
 
-        // bottom row
         g.gridy = 1; g.gridx = 0; g.anchor = GridBagConstraints.SOUTHWEST;
         accuracyPanel.add(bottomLeft, g);
         g.gridx = 2; g.anchor = GridBagConstraints.SOUTHEAST;
@@ -174,7 +188,4 @@ public class GUI {
     public static void main(String[] args) {
         new GUI().panels();
     }
-
 }
-
-//* 15:02 */
