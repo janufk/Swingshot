@@ -2,14 +2,18 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-public class GUI {
+public class GUI 
+{
     public String selectedTarget = null;
     protected JPanel leftPanel;
     public ball footBall;
     public goalkeeper keeper;
     public goalkeeperAnimation keeperAnimate;
+    public gameLogic logic = new gameLogic();
 
-    void panels() {
+
+    void panels() 
+    {
         JFrame frame = new JFrame("Swingshot");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout());
@@ -18,9 +22,11 @@ public class GUI {
         keeper = new goalkeeper(425, 355, 200, 300);
 
         
-        leftPanel = new JPanel() {
+        leftPanel = new JPanel() 
+        {
             @Override
-            protected void paintComponent(Graphics g) {
+            protected void paintComponent(Graphics g) 
+            {
                 super.paintComponent(g);
                 
 
@@ -57,9 +63,15 @@ public class GUI {
                 g.setColor(Color.white);
                 g.fillOval(515, 720, 30, 30);
 
-                footBall.ballImage(g);
                 keeper.goalkeeperImage(g);
+                footBall.ballImage(g);
+
                 keeperAnimate = new goalkeeperAnimation(keeper, leftPanel);
+
+                g.setColor(Color.BLACK);
+                g.setFont(new Font("default", Font.BOLD, 16));
+                g.drawString("Score: " + logic.getScore(), 500, 250);
+
 
             }
         };
@@ -101,7 +113,8 @@ public class GUI {
             }
             powerBar.putClientProperty("increasing", increasing);
             powerBar.setValue(value);
-        });
+        }
+        );
         powerTimer.start();
 
         shotPowerButton.addActionListener(e -> {
@@ -116,7 +129,8 @@ public class GUI {
 
                 keeperAnimate.dive();
             }
-        });
+        }
+        );
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
@@ -143,11 +157,13 @@ public class GUI {
         JButton center = new JButton("Center");
 
         Dimension btnSize = new Dimension(110, 60);
-        for (JButton b : new JButton[]{topLeft, topRight, bottomLeft, bottomRight, center}) {
+        for (JButton b : new JButton[]{topLeft, topRight, bottomLeft, bottomRight, center}) 
+        {
             b.setPreferredSize(btnSize);
         }
 
-        ActionListener targetListener = e -> {
+        ActionListener targetListener = e -> 
+        {
             selectedTarget = ((JButton) e.getSource()).getText();
             System.out.println("Selected Target: " + selectedTarget);
         };
@@ -185,7 +201,8 @@ public class GUI {
         frame.setVisible(true);
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) 
+    {
         new GUI().panels();
     }
 }

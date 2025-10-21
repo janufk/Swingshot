@@ -3,36 +3,40 @@ import java.awt.*;
 import java.util.Random;
 
 public class goalkeeperAnimation {
-    private goalkeeper goalkeeper;  // uses goalkeeper class
+    private goalkeeper goalkeeper;
     private JPanel panel;
     private Timer timer;
     private int targetSelectX, targetSelectY;
     private double animationx, animationy;
-    private int steps = 30; // fewer steps = faster dive
+    private int steps = 30;
     private int currentStep = 0;
     private Random random = new Random();
 
     private Image standImage;
     private Image diveLeftImage;
     private Image diveRightImage;
+    private Image diveRightTopImage;
+    private Image diveLeftTopImage;
 
     public goalkeeperAnimation(goalkeeper goalkeeper, JPanel panel) {
         this.goalkeeper = goalkeeper;
         this.panel = panel;
 
-        // Load goalkeeper images
+        //load goalkeeper images
         standImage = new ImageIcon("/Users/janufkrishnan/Downloads/WhatsApp Image 2025-10-19 at 15.19.11-converted-from-jpeg-2.png").getImage();
         diveLeftImage = new ImageIcon("/Users/janufkrishnan/Downloads/WhatsApp Image 2025-10-19 at 15.19.11 (2)-converted-from-jpeg-2.png").getImage();
         diveRightImage = new ImageIcon("/Users/janufkrishnan/Downloads/WhatsApp Image 2025-10-19 at 15.19.11 (1)-converted-from-jpeg-2.png").getImage();
+        diveRightTopImage = new ImageIcon("/Users/janufkrishnan/Downloads/goalkeeper_dive_right_no_bg_top.PNG").getImage();
+        diveLeftTopImage = new ImageIcon("/Users/janufkrishnan/Downloads/goalkeeper_dive_left_no_bg_top.PNG").getImage();
 
 
     }
 
     public void dive() {
-        int dive = 2; //0 = centre, 1 = top left, 2 = bottom left, 3 = top right, 4 = bottom right, 5 = top right
+        int dive = random.nextInt(5); //0 = centre, 1 = top left, 2 = bottom left, 3 = top right, 4 = bottom right
 
         int startX = goalkeeper.getX();
-        int startY = goalkeeper.getY();
+        int startY = goalkeeper.getY(); //becaus of image dimensions wont be equal
 
         if (dive == 0) 
         { // centre
@@ -42,10 +46,10 @@ public class goalkeeperAnimation {
         }
          else if (dive == 1) 
         { // top left
-            targetSelectX = startX - 300;
-            targetSelectY = startY + 80;
-            goalkeeper.setImage(diveLeftImage);
-            goalkeeper.setSize(300, 200);
+            targetSelectX = startX - 225;
+            targetSelectY = startY - 10;
+            goalkeeper.setImage(diveLeftTopImage);
+            goalkeeper.setSize(250, 150);
         }
          else if (dive == 2) 
         {//bottom left
@@ -57,9 +61,10 @@ public class goalkeeperAnimation {
 
         else if (dive == 3) 
         {//top right
-            targetSelectX = startX + 120;
-            targetSelectY = startY + 40;
-            goalkeeper.setImage(diveRightImage);
+            targetSelectX = startX + 150;
+            targetSelectY = startY - 30;
+            goalkeeper.setImage(diveRightTopImage);
+            goalkeeper.setSize(310, 210);
         }
 
         else if (dive == 4) 

@@ -11,25 +11,37 @@ public class ballAnimation {
     private int currentStep = 0;
 
     //need constructor to initialise
-    public ballAnimation(ball footBall, JPanel panel) {
+    public ballAnimation(ball footBall, JPanel panel) 
+    {
         this.footBall = footBall;
         this.panel = panel;
     }
 
-    public void shooting(int power, String targetSelect) {
-        if (targetSelect.equals("Top Left")) {
+    public void shooting(int power, String targetSelect) 
+    {
+        if (targetSelect.equals("Top Left")) 
+        {
             targetSelectX = 260;
             targetSelectY = 350;
-        } else if (targetSelect.equals("Top Right")) {
+        } 
+        else if (targetSelect.equals("Top Right")) 
+        {
             targetSelectX = 760;
             targetSelectY = 350;
-        } else if (targetSelect.equals("Bottom Left")) {
+        } 
+        else if (targetSelect.equals("Bottom Left")) 
+        {
             targetSelectX = 260;
             targetSelectY = 580;
-        } else if (targetSelect.equals("Bottom Right")) {
+        } 
+        else if (targetSelect.equals("Bottom Right")) 
+        {
             targetSelectX = 760;
             targetSelectY = 580;
-        } else if (targetSelect.equals("Center")) {
+        } 
+        
+        else if (targetSelect.equals("Center")) 
+        {
             targetSelectX = 525;
             targetSelectY = 450;
         }
@@ -52,10 +64,13 @@ public class ballAnimation {
                                      (int) (footBall.getY() + animationy));
                 panel.repaint();
                 currentStep++;
-            } else {
+            } 
+            else
+            {
                 ((Timer) e.getSource()).stop();
             }
-        });
+        }
+        );
 
         timer.start();
     }
