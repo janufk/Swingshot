@@ -23,5 +23,32 @@ public class gameLogic {
         return score;
     }
 
+   public Boolean savePenalty(int targetSelect, int powerValue)
+   {
+    boolean saved;
+    if (goalkeeperAnimation.dive == targetSelect)
+    {
+        this.notScored();
+        saved = true;
+    }
+
+    else if(powerValue > 90)
+    {
+        this.notScored();
+        saved = false;
+    }
+
+
+    else
+    {
+        this.scored();
+        saved = false;
+    }
+
+    return saved;
+
+
+   }
+
 
 }

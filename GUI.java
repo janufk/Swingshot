@@ -6,10 +6,14 @@ public class GUI
 {
     public String selectedTarget = null;
     protected JPanel leftPanel;
+    public int targetSelect; //stores which button is clicked
     public ball footBall;
+    private boolean ballSeen = true;
     public goalkeeper keeper;
     public goalkeeperAnimation keeperAnimate;
     public gameLogic logic = new gameLogic();
+    public Image savedkeeper;
+    public Image notsavedkeeper;
 
 
     void panels() 
@@ -60,13 +64,29 @@ public class GUI
                 g.setColor(Color.white);
                 g.fillRect(0, 600, 1200, 5);
 
+                for (int i = 0; i < 15; i++) {
+                    int y = 320 + i * 20;
+                    g.drawLine(215, y, 815, y);
+                }
+
+                for (int i = 0; i < 31; i++) {
+                    int x = 215 + i * 20;
+                    g.drawLine(x, 300, x, 600);
+                }
+
                 g.setColor(Color.white);
                 g.fillOval(515, 720, 30, 30);
 
-                keeper.goalkeeperImage(g);
-                footBall.ballImage(g);
+                g.setColor(Color.yellow);
+                g.fillArc(-100, -100, 200, 200, 270, 90);
 
-                keeperAnimate = new goalkeeperAnimation(keeper, leftPanel);
+                
+
+                keeper.goalkeeperImage(g);
+                if (ballSeen) {
+                    footBall.ballImage(g);
+                }
+
 
                 g.setColor(Color.BLACK);
                 g.setFont(new Font("default", Font.BOLD, 16));
@@ -78,6 +98,7 @@ public class GUI
         leftPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         leftPanel.setPreferredSize(new Dimension(1200, 800));
         leftPanel.setBackground(Color.WHITE);
+        keeperAnimate = new goalkeeperAnimation(keeper, leftPanel);
 
         JPanel rightPanel = new JPanel(new GridLayout(2, 1, 0, 0));
         rightPanel.setPreferredSize(new Dimension(500, 800));
@@ -115,22 +136,58 @@ public class GUI
             powerBar.setValue(value);
         }
         );
+
+        notsavedkeeper = new ImageIcon("/Users/janufkrishnan/Downloads/WhatsApp_Image_2025-10-23_at_11.22.55__1_-removebg-preview.png").getImage();
+        savedkeeper = new ImageIcon("/Users/janufkrishnan/Downloads/WhatsApp_Image_2025-10-23_at_11.22.55-removebg-preview.png").getImage();
         powerTimer.start();
 
-        shotPowerButton.addActionListener(e -> {
+        shotPowerButton.addActionListener(e -> 
+        {
+            shotPowerButton.setEnabled(false);
             powerTimer.stop();
             int powerValue = powerBar.getValue();
             System.out.println("Power level: " + powerValue);
             if (selectedTarget == null) {
                 JOptionPane.showMessageDialog(frame, "Please select a shot direction first!");
+                shotPowerButton.setEnabled(true);
             } else {
                 ballAnimation animation = new ballAnimation(footBall, leftPanel);
                 animation.shooting(powerValue, selectedTarget);
 
                 keeperAnimate.dive();
+                Timer resultTimer = new Timer(800, ev2 -> {
+                    boolean saved = logic.savePenalty(targetSelect, powerValue);
+
+                    if(saved){
+                        keeper.setImage(savedkeeper);
+                        keeper.setSize(135, 265);
+                        keeper.setPosition(keeper.getX(), 370);
+                        ballSeen = false;
+                    }
+
+                    else{
+                        keeper.setImage(notsavedkeeper);
+                        keeper.setSize(150, 290);
+                        keeper.setPosition(keeper.getX(), 360);
+                    }
+                    leftPanel.repaint();
+                
+                logic.savePenalty(targetSelect, powerValue);
+                leftPanel.repaint();
+                Timer resetTimer = new Timer(2000, ev -> {
+                reset(powerBar, shotPowerButton, powerTimer);
             }
-        }
-        );
+            );
+
+            resetTimer.setRepeats(false);
+            resetTimer.start();
+        });
+
+        resultTimer.setRepeats(false);
+        resultTimer.start();
+    }
+    }
+    );
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
@@ -165,6 +222,31 @@ public class GUI
         ActionListener targetListener = e -> 
         {
             selectedTarget = ((JButton) e.getSource()).getText();
+
+            if(selectedTarget == "Center")
+            {
+                targetSelect = 0;
+            }
+
+            else if(selectedTarget == "Top Left")
+            {
+                targetSelect = 1;
+            }
+
+            else if(selectedTarget == "Bottom Left")
+            {
+                targetSelect = 2;
+            }
+
+            else if(selectedTarget == "Top Right")
+            {
+                targetSelect = 3;
+            }
+
+            else if(selectedTarget == "Bottom Right")
+            {
+                targetSelect = 4;
+            }
             System.out.println("Selected Target: " + selectedTarget);
         };
 
@@ -199,6 +281,26 @@ public class GUI
         frame.setSize(1700, 800);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+    }
+
+    public void reset(JProgressBar powerBar, JButton shotPowerButton, Timer powerTimer){ //java quick fix
+        footBall.setPosition(505, 700); //resets ball
+        keeper.setPosition(425, 355); //resets keeper
+        keeper.setSize(200, 300); //sets keeper size
+        keeper.setImage(new ImageIcon("/Users/janufkrishnan/Downloads/WhatsApp Image 2025-10-19 at 15.19.11-converted-from-jpeg-2.png").getImage());//keeper image reset
+
+        ballSeen = true;
+
+        selectedTarget = null;
+        targetSelect = 6; //resets all target related input
+        
+        powerBar.setValue(0);
+        leftPanel.repaint(); //resets the field
+        shotPowerButton.setEnabled(true);
+
+        powerTimer.start();
+
+
     }
 
     public static void main(String[] args) 

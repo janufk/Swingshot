@@ -11,6 +11,7 @@ public class goalkeeperAnimation {
     private int steps = 30;
     private int currentStep = 0;
     private Random random = new Random();
+    public static int dive;
 
     private Image standImage;
     private Image diveLeftImage;
@@ -33,7 +34,10 @@ public class goalkeeperAnimation {
     }
 
     public void dive() {
-        int dive = random.nextInt(5); //0 = centre, 1 = top left, 2 = bottom left, 3 = top right, 4 = bottom right
+        if (timer != null && timer.isRunning()) {
+            timer.stop();
+        }
+        dive = random.nextInt(5); //0 = centre, 1 = top left, 2 = bottom left, 3 = top right, 4 = bottom right, 5 = top right
 
         int startX = goalkeeper.getX();
         int startY = goalkeeper.getY(); //becaus of image dimensions wont be equal
@@ -79,7 +83,7 @@ public class goalkeeperAnimation {
         animationy = (targetSelectY - startY) / (double) steps;
         currentStep = 0;
 
-        // Timer to animate the dive
+        //timer to animate the dive
         timer = new Timer(15, e -> {
             if (currentStep < steps) {
                 goalkeeper.setPosition((int)(goalkeeper.getX() + animationx),

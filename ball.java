@@ -32,4 +32,9 @@ public class ball {
     public int getY() {
          return y; 
         }
+
+    public static void setVisible(boolean b) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setVisible'");
+    }
 }

@@ -39,7 +39,7 @@ public class ballAnimation {
             targetSelectX = 760;
             targetSelectY = 580;
         } 
-        
+
         else if (targetSelect.equals("Center")) 
         {
             targetSelectX = 525;
